@@ -2,6 +2,8 @@ plugins {
     id 'java'
 }
 
+
+import org.codehaus.groovy.runtime.GStringImpl
 import org.gradle.internal.os.OperatingSystem
 
 project.ext.lwjglVersion = "3.3.1"
@@ -11,16 +13,16 @@ switch (OperatingSystem.current()) {
         def osArch = System.getProperty("os.arch")
         project.ext.lwjglNatives = osArch.startsWith("arm") || osArch.startsWith("aarch64")
                 ? "natives-linux-${osArch.contains("64") || osArch.startsWith("armv8") ? "arm64" : "arm32"}"
-                : "natives-linux"
+                : "natives-linux" as GStringImpl
         break
     case OperatingSystem.MAC_OS:
-        project.ext.lwjglNatives = System.getProperty("os.arch").startsWith("aarch64") ? "natives-macos-arm64" : "natives-macos"
+        project.ext.lwjglNatives = System.getProperty("os.arch").startsWith("aarch64") ? "natives-macos-arm64" : "natives-macos" as GStringImpl
         break
     case OperatingSystem.WINDOWS:
         def osArch = System.getProperty("os.arch")
         project.ext.lwjglNatives = osArch.contains("64")
                 ? "natives-windows${osArch.startsWith("aarch64") ? "-arm64" : ""}"
-                : "natives-windows-x86"
+                : "natives-windows-x86" as GStringImpl
         break
 }
 
@@ -36,6 +38,8 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
 
+    implementation 'org.tinylog:tinylog-api:2.6.1'
+    implementation 'org.tinylog:tinylog-impl:2.6.1'
     implementation "org.lwjgl:lwjgl"
     implementation "org.lwjgl:lwjgl-assimp"
     implementation "org.lwjgl:lwjgl-glfw"

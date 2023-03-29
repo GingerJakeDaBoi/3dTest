@@ -9,7 +9,6 @@ public class Game implements Runnable {
     private final Window window;
     private final Thread mainLoop;
     private boolean isRunning;
-    private final int frameCap = 60;
 
     public Game(String windowTitle, int width, int height, boolean vsSync ,IGameLogic gameLogic) {
         mainLoop = new Thread(this);
@@ -29,7 +28,7 @@ public class Game implements Runnable {
     }
 
     private void update() {
-        gameLogic.update();
+        gameLogic.tick();
     }
 
     private void render() {
@@ -38,6 +37,7 @@ public class Game implements Runnable {
     }
 
     private void loop() {
+        int frameCap = 60;
         final double updateTime = (double) 1000000000 / frameCap;
         double lastUpdateTime = glfwGetTime();
         double lastRenderTime;
@@ -55,13 +55,12 @@ public class Game implements Runnable {
 
                 if(glfwWindowShouldClose(window.getWindowHandle())) {
                     System.err.println("Closing application");
+                    cleanup();
                     System.exit(0); //TODO: In the future, actually clean up
                 }
 
-                glfwSwapBuffers(window.getWindowHandle());
-                glfwPollEvents();
-
-                window.clear();
+                window.update();
+                window.pollEvents();
 
                 lastUpdateTime += updateTime;
                 updateCount++;
@@ -91,6 +90,12 @@ public class Game implements Runnable {
             }
         }
         System.out.println("Time to die!");
+    }
+
+    private void cleanup() {
+        window.cleanup();
+//        gameLogic.cleanup();
+        System.exit(0);
     }
 
     @Override

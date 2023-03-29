@@ -6,7 +6,7 @@ public interface IGameLogic {
 
     void input(Window window);
 
-    void update();
+    void tick();
 
     void render(Window window);
 

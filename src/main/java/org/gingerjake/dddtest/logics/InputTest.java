@@ -4,10 +4,9 @@ import org.gingerjake.dddtest.IGameLogic;
 import org.gingerjake.dddtest.Renderer;
 import org.gingerjake.dddtest.Window;
 
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
+import static org.lwjgl.glfw.GLFW.*;
 
-public class Dummy implements IGameLogic {
+public class InputTest implements IGameLogic {
     private int direction = 0;
     private float color = 0.0f;
     private Renderer renderer;
@@ -29,7 +28,7 @@ public class Dummy implements IGameLogic {
     }
 
     @Override
-    public void update() {
+    public void tick() {
         color += direction * 0.01;
         if (color > 1) {
             color = 1.0f;
@@ -40,8 +39,6 @@ public class Dummy implements IGameLogic {
 
     @Override
     public void render(Window window) {
-        System.out.println(direction);
-        System.out.println("Changing color to " + color);
         window.setClearColor(color, color, color, 0.0f);
         renderer.clear(window);
     }
